@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
@@ -16,30 +16,65 @@ import './App.css';
 console.log()
 
 function App() {
-  const movieList = [
-    { title: "The apple sings" },
-    { title: "The orange sings" },
-    { title: "The tree sings" }
-  ]
 
 
 
   const API_ENDPOINT = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=`
 
   const [searchTerm, setSearchTerm] = useState("")
+  const [movies, setMovies] = useState("")
 
   const [url, setUrl] = useState(
-    `${API_ENDPOINT}${searchTerm}`
+    // `${API_ENDPOINT}${searchTerm}`
+    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&query=hello`
   )
 
-  // useEffect(
-  //   axios.get(url)
-  // )
 
-  const handleSearchInput = (event) => {
-    console.log(event.target.value)
-    setSearchTerm(event.target.value)
+  const handleSearchInput = (value) => {
+    setSearchTerm(value)
+    console.log(searchTerm)
   }
+
+  const handleSearchInput2 = (event) => {
+    setSearchTerm(event.target.value)
+    console.log(searchTerm)
+  }
+
+  const handleSearchSubmit = (event) => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
+    console.log(`${API_ENDPOINT}${searchTerm}`)
+    event.preventDefault();
+  }
+
+  const handleFetchStories = async () => {
+      const res = await axios.get(url);
+      setMovies(res.data.results)
+      console.log(res.data.results)
+    };
+
+  useEffect(() => {
+    handleFetchStories();
+  }, [url])
+
+
+  // const handleFetchStories = useCallback(async () => {
+  //   dispatchStories({ type: 'STORIES_FETCH_INIT' })
+  //   try {
+  //     const result = await axios.get(url);
+
+  //     dispatchStories({
+  //       type: "STORIES_FETCH_SUCCESS",
+  //       payload: result.data.hits,
+  //     });
+  //   } catch{
+  //     dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
+  //   }
+  // }, [url]);
+
+
+  // useEffect(() => {
+  //   handleFetchStories();
+  // }, [handleFetchStories])
 
 
 
@@ -76,50 +111,66 @@ function App() {
       </header>
 
       <SearchBar
-    value={searchTerm}
-    onChange={handleSearchInput}
-    // onRequestSearch={() => doSomethingWith(this.state.value)}
-  />
+        value={searchTerm}
+        onChange={handleSearchInput}
+        onRequestSearch={handleSearchSubmit}
+        disabled={!searchTerm}
+        style={{
+          margin: '1rem auto',
+          maxWidth: 800
+        }}
 
-<Box m={2}>
-      <form>
 
-        <TextField
-          style={{ minWidth:"30%", marginRight:"1rem"}}
-          variant="outlined"
-          size='sm'
-          // variant ="outlined"
-          color="primary"
-          type="email"
-          // type="date"
-          // type="time"
-          label="Search"
-          value={searchTerm}
-          onChange={handleSearchInput}
+      //  />
+      // value={searchTerm}
+      // onChange={handleSearchInput}
+      // onRequestSearch={() => doSomethingWith(this.state.value)}
+      />
 
-        />
+      <Box m={2}>
+        <form onSubmit={handleSearchSubmit}>
 
-        <Button
-          startIcon={<SearchIcon />}
-          size="large"
-          href="#"
-          onClick={() => alert('Hello')}
-          variant="contained"
-          color="primary">
-          search
+          <TextField
+            style={{ minWidth: "30%", marginRight: "1rem" }}
+            variant="outlined"
+            size='sm'
+            // variant ="outlined"
+            color="primary"
+            // type="date"
+            // type="time"
+            label="Search"
+            value={searchTerm}
+            onChange={handleSearchInput2}
+
+          />
+
+          <Button
+            type="submit"
+            startIcon={<SearchIcon />}
+            size="large"
+            href="#"
+            onClick={handleSearchSubmit}
+            variant="contained"
+            color="primary">
+            search
         </Button>
-      </form>
+        </form>
 
 
-</Box>
+      </Box>
 
 
       <div>
-        {movieList
-          .filter(movie => movie.title.includes(searchTerm))
-          .map(movie => (
-            <p>{movie.title}</p>
-          ))}
+        {console.log("rendered")}
+        {movies &&
+          movies
+            .filter(res => res.original_title.includes(searchTerm))
+            .map(res => (
+              <div>
+                <p>{res.original_title}</p>
+                <p>s</p>
+              </div>
+            ))}
       </div>
     </div>
 
