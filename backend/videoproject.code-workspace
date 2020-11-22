@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../Practice/react-project"
+		},
+		{
+			"path": "../../FoodTour/client/src"
+		}
+	],
+	"settings": {}
+}
