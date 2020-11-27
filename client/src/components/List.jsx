@@ -8,6 +8,8 @@ export default function List({movies, searchTerm}) {
         <Grid container spacing={3} mt={2}>
         {movies &&
           movies
+             //the filter is not currently effective
+            .filter((movie) => movie.adult===false)
             .map(movie => (
                <Item key={movie.id} movie={movie}/>
             ))}
