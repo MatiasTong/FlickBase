@@ -8,33 +8,38 @@ import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 
 function NavBar() {
-    const useStyles = makeStyles((theme) => ({
-        root: {
-          flexGrow: 1,
-        },
-        menuButton: {
-          marginRight: theme.spacing(2),
-        },
-        title: {
-          flexGrow: 1,
-        },
-      }));
-    
-      const classes = useStyles();
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }));
 
-    return (
-        <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            FlickBase
+  const classes = useStyles();
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <MenuIcon />
+        </IconButton>
+        <Typography style={{ fontFamily: "'Lato', sans-serif", FontWeight: "700", textShadow: "1px 1px #04d9ff" }} variant="h6" className={classes.title}>
+          FlickBase
           </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    )
+        <img
+          src="blue_short.svg"
+          alt="triangle with all three sides equal"
+          height="87"
+          width="100" />
+        {/* <Button color="inherit">Login</Button> */}
+      </Toolbar>
+    </AppBar>
+  )
 }
 
 export default NavBar
