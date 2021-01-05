@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import LikeIcon from '@material-ui/icons/ThumbUpAlt'
 import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Card from '@material-ui/core/Card'
 import Chip from '@material-ui/core/Chip'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
@@ -13,23 +15,22 @@ import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import NavBar from "../components/NavBar"
 
-// const useStyles = makeStyles({
-//     root: {
-//         fontStyle: "oblique",
-//         color: 'red',
-//         fontSize: "30px"
-//     },
-//     buttonStyles: {
-//         color: 'green',
-//         border: "none"
-//     }
-// })
+const useStyles = makeStyles({
+    root: {
+        marginTop: "10px"
+    },
+    card: {
+        padding: '1rem'
+   
+    }
+})
 
 export default function MovieDetails() {
-    // const classes = useStyles();
+    const classes = useStyles();
 
     //get the movieId from the route params
     let { movieID } = useParams();
+    
     const MOVIE_URL = `https://api.themoviedb.org/3/movie/${movieID}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
     const MOVIE_REF = firebaseDB.ref('movies/' + movieID);
     const POSTER_IMAGE = `https://image.tmdb.org/t/p/w342`
@@ -110,7 +111,7 @@ export default function MovieDetails() {
      
         <NavBar />
         <Container>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
                 {movieDetails.isError && <p>Something went wrong ...</p>}
 
                 {movieDetails.isLoading ? (
@@ -123,9 +124,10 @@ export default function MovieDetails() {
                                     : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
 
                             </Grid>
-
+           
 
                             <Grid item sm={8}>
+                                <Card className={classes.card}>
 
                                 <h1>{original_title}</h1>
                                 {tagline && <h2>{`"${tagline}"`}</h2>}
@@ -145,7 +147,7 @@ export default function MovieDetails() {
                                     </Typography>
                                 </Button>
 
-                                <Grid container>
+                                <Grid item container justify="center">
                                     {genres && genres.map(
                                         (genre) => (
                                             <Grid item my={2} >
@@ -156,11 +158,20 @@ export default function MovieDetails() {
                                     )}
 
                                 </Grid>
+                                </Card>
                             </Grid>
 
+                            <Grid item sm={4}>
+                            <Card className={classes.card} m={4}>
+                                </Card>
+                            </Grid>
+                            <Grid item sm={8} >
+                            <Paper variant="outlined">
                             {backdrop_path ? <img style={{ height: '25rem', borderRadius: "5px" }} alt={`${title}`} src={`${BACKDROP_IMAGE}${backdrop_path}`} />
                                 : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
-
+</Paper>
+</Grid>
+                          
                         </>
                     )}
 

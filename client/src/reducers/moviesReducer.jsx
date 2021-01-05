@@ -7,19 +7,20 @@ export default function moviesReducer(state, action) {
                 isError: false,
             }
         case 'MOVIES_FETCH_SUCCESS':
-            console.log(state.data)
+            console.log(action.payload)
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
                 page:1,
-                pagesCount: action.payload.data.total_pages,
                 resultsCount: action.payload.data.total_results,
                 data: action.payload.data.results,
+                queryType: action.payload.queryType,
+                searchTerm: action.payload.searchTerm
+        
             }
 
         case 'MOVIES_FETCH_SCROLL_SUCCESS':
-            
             return {
                 ...state,
                 isLoading: false,

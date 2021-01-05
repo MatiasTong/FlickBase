@@ -6,12 +6,14 @@ import Box from "@material-ui/core/Box"
 import Grid from "@material-ui/core/Grid"
 import Search from "./Search"
 import SearchSubtitle from "./SearchSubtitle"
+import Header from "./Header"
 
-export default function SearchForm({
+
+function SearchForm({
     onSearchInput, onSearchSubmit, searchTerm, resultsCount, sortOption, onSortSelect, isSubmit }) {
     return (
-        <div>
-            <Grid container justify="center" alignItems="center">
+        <Header>
+            <Grid container justify="center" alignItems="center" style={{opacity: 1}}>
                 <Box mt={2} width="100%">
                 <Grid container item justify="center" alignItems="center" spacing={2}>
                 <Grid item  sm={6} lg={6}>
@@ -22,7 +24,7 @@ export default function SearchForm({
                     />
                 </Grid>
                 <Grid item sm={2} lg={1}>
-                <FormControl variant="outlined" >
+                <FormControl variant="outlined" style={{backgroundColor: "white"}} >
                     <Select
                         value={sortOption}
                         onChange={onSortSelect}
@@ -53,6 +55,8 @@ export default function SearchForm({
             </Grid>
 
 
-        </div>
+        </Header>
     )
 }
+
+export default SearchForm

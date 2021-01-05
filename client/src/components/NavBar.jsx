@@ -9,12 +9,14 @@ import AppBar from '@material-ui/core/AppBar'
 
 function NavBar() {
   const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
+    // root: {
+    //   flexGrow: 1,
+    // },
+
+    appBar:{
+      background: "linear-gradient(to right, #315EC8, #725CFF)",
     },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
+   
     title: {
       flexGrow: 1,
     },
@@ -23,19 +25,20 @@ function NavBar() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.appBar}>
       <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+        {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
           <MenuIcon />
-        </IconButton>
-        <Typography style={{ fontFamily: "'Lato', sans-serif", FontWeight: "700", textShadow: "1px 1px #04d9ff" }} variant="h6" className={classes.title}>
+        </IconButton> */}
+        <Typography edge="start"  style={{ position: "relative", fontFamily: "'Patua One', cursive", textShadow: "1px 1px #04d9ff" }} variant="h4" className={classes.title}>
           FlickBase
           </Typography>
+        
         <img
-          src="blue_short.svg"
+          src="../blue_short.svg"
           alt="triangle with all three sides equal"
           height="87"
-          width="100" />
+          width="150" />
         {/* <Button color="inherit">Login</Button> */}
       </Toolbar>
     </AppBar>
