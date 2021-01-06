@@ -8,7 +8,7 @@ import Fade from '@material-ui/core/Fade';
 const List = React.memo(({movies}) => {
     return (
       <Fade in={true} timeout={1000}>
-        <Grid container spacing={3} mt={2}>
+        <Grid container spacing={2}>
         {movies &&
           movies
              //the filter is not currently effective

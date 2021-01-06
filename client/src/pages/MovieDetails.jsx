@@ -3,34 +3,60 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import LikeIcon from '@material-ui/icons/ThumbUpAlt'
 import Grid from '@material-ui/core/Grid'
+import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
+import CardMedia from '@material-ui/core/CardMedia'
 import Chip from '@material-ui/core/Chip'
 import Button from '@material-ui/core/Button'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItem from '@material-ui/core/ListItem'
 import Container from '@material-ui/core/Container'
+import Tooltip from '@material-ui/core/Tooltip'
+import DeleteIcon from '@material-ui/icons/Delete'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import movieDetailsReducer from '../reducers/movieDetailsReducer';
 import firebaseDB from "../firebase"
 import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import NavBar from "../components/NavBar"
+import { usePalette } from 'react-palette';
+import CallMadeIcon from '@material-ui/icons/CallMade';
+import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = makeStyles({
     root: {
-        marginTop: "10px"
+        paddingTop: "10px"
     },
     card: {
         padding: '1rem'
-   
+
+    },
+    statsCard: {
+       margin: '0 auto',
+        maxWidth: "90%",
+    },
+
+    websiteButton:{
+        position: "absolute",
+        top: 4,
+        right: 4,
+        opacity: 0.5
+    },
+
+    overviewSection:{
+        position:"relative"
     }
 })
 
 export default function MovieDetails() {
     const classes = useStyles();
 
+
     //get the movieId from the route params
     let { movieID } = useParams();
-    
+
     const MOVIE_URL = `https://api.themoviedb.org/3/movie/${movieID}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
     const MOVIE_REF = firebaseDB.ref('movies/' + movieID);
     const POSTER_IMAGE = `https://image.tmdb.org/t/p/w342`
@@ -53,7 +79,7 @@ export default function MovieDetails() {
         try {
             let likeCount = 0
             const result = await axios.get(MOVIE_URL);
-          
+
 
             if (window.localStorage.getItem(movieID)) {
                 movieDetails.data.isLiked = true;
@@ -70,7 +96,7 @@ export default function MovieDetails() {
                 type: 'MOVIE_FETCH_SUCCESS',
                 payload: { ...result.data, likes: likeCount },
             });
-         
+
         } catch (err) {
             console.log(err)
             dispatchMovieDetails({ type: 'MOVIE_FETCH_FAILURE' });
@@ -103,80 +129,111 @@ export default function MovieDetails() {
         handleFetchMovieDetails();
     }, [handleFetchMovieDetails])
 
-    const { poster_path, backdrop_path, genres, title, original_title, popularity, likes, tagline, overview, isLiked } = movieDetails.data
-
+    const { poster_path, backdrop_path, genres, title, homepage, original_title, popularity, likes, tagline, overview, isLiked } = movieDetails.data
+    const { data, loading, error } = usePalette(`${POSTER_IMAGE}${poster_path}`)
     return (
         <div className="App">
 
-     
-        <NavBar />
-        <Container>
-            <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
+
+            <NavBar />
+            <Container style={{ backgroundColor: data.darkMuted }}>
+                {/* <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}> */}
                 {movieDetails.isError && <p>Something went wrong ...</p>}
 
                 {movieDetails.isLoading ? (
                     <CircularProgress />
                 ) : (
                         <>
-
-                            <Grid item sm={4}>
-                                {poster_path ? <img style={{ margin: "0 auto", height: '25rem', borderRadius: "5px", display: "block", textAlign: "center" }} alt={`${title}`} src={`${POSTER_IMAGE}${poster_path}`} />
-                                    : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
-
-                            </Grid>
-           
-
-                            <Grid item sm={8}>
-                                <Card className={classes.card}>
-
-                                <h1>{original_title}</h1>
-                                {tagline && <h2>{`"${tagline}"`}</h2>}
-                                <p>{overview}</p>
-                                <p>{`Popularity: ${popularity}`}</p>
-                                <Button
-                                    style={isLiked ? { color: "yellow" } : { color: "white" }}
-                                    startIcon={<LikeIcon />}
-                                    size="medium"
-                                    onClick={toggleLike}
-                                    variant="contained"
-                                    color="primary"
-                                // className={classes.buttonStyles}
-                                >
-                                    <Typography style={{ letterSpacing: "0.1rem" }}>
-                                        {`Like  ${likes ? likes : ""}`}
-                                    </Typography>
-                                </Button>
-
-                                <Grid item container justify="center">
-                                    {genres && genres.map(
-                                        (genre) => (
-                                            <Grid item my={2} >
-                                                <Chip style={{margin: "1rem 0.2rem"}}key={genre.id} label={genre.name} />
-
-                                            </Grid>
-                                        )
-                                    )}
-
+                            <Grid container item spacing={3} justify="center" alignItems="stretch" className={classes.root}>
+                                <Grid item lg={3}>
+                                    {poster_path ? <img style={{ margin: "0px", height: '25rem', borderRadius: "5px" }} alt={`${title}`} src={`${POSTER_IMAGE}${poster_path}`} />
+                                        : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
                                 </Grid>
-                                </Card>
+
+                                <Grid item lg={8} className={classes.overviewSection}>
+                                    <Card className={classes.card} style={{ backgroundColor: "rgba(0,0,0,0.3)", color: "white", height: "90%" }}>
+                                    {(homepage) && 
+                                    <Zoom in={true}>
+
+                                    <Tooltip title="Visit Site" className={classes.websiteButton}>
+  <Button  variant="contained" aria-label="visit site" size="small" target="_blank" href={homepage}>
+    <CallMadeIcon />
+  </Button>
+</Tooltip>
+                                    </Zoom>}
+                                        <h1>{original_title}</h1>
+                                        {tagline && <h2>{`"${tagline}"`}</h2>}
+
+                                        <p>{overview}</p>
+
+                                     
+                                     
+                                        <Button
+                                            style={isLiked ? { color: "yellow" } : { color: "white" }}
+                                            startIcon={<LikeIcon />}
+                                            size="medium"
+                                            onClick={toggleLike}
+                                            variant="contained"
+                                            color="primary"
+                                        // className={classes.buttonStyles}
+                                        >
+                                            <Typography style={{ letterSpacing: "0.1rem" }}>
+                                                {`Like  ${likes ? likes : ""}`}
+                                            </Typography>
+                                        </Button>
+
+                                        <Grid item container justify="center">
+                                            {genres && genres.map(
+                                                (genre) => (
+                                                    <Grid item my={2} >
+                                                        <Chip style={{ margin: "1rem 0.2rem" }} key={genre.id} label={genre.name} />
+
+                                                    </Grid>
+                                                )
+                                            )}
+
+                                        </Grid>
+                                    </Card>
+                                </Grid>
                             </Grid>
 
-                            <Grid item sm={4}>
-                            <Card className={classes.card} m={4}>
-                                </Card>
+                            <Grid className={classes.root} container item spacing={3} justify="center" alignItems="start">
+                                <Grid item lg={3} xs={12}>
+                                    <Paper className={classes.statsCard} >
+                                        <ListItem>
+                                            <ListItemText
+                                                primary={`Popularity: ${popularity}`}
+                                                secondary='Secondary text'
+                                            />
+                                        </ListItem>
+                                        <Divider />
+                                        <ListItem>
+                                            <ListItemText
+                                                primary="Single-line item"
+                                                secondary="Secondary"
+                                            />
+                                        </ListItem>
+                                    </Paper>
+                                </Grid>
+                                <Grid item lg={8} >
+                                    <Card>
+
+                                        {backdrop_path ? <CardMedia
+                                            component="img"
+                                            alt={`${title}`}
+                                            height="100%"
+                                            image={`${BACKDROP_IMAGE}${backdrop_path}`}
+                                            title={`${title}`}
+                                        />
+                                            : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
+                                    </Card>
+                                </Grid>
                             </Grid>
-                            <Grid item sm={8} >
-                            <Paper variant="outlined">
-                            {backdrop_path ? <img style={{ height: '25rem', borderRadius: "5px" }} alt={`${title}`} src={`${BACKDROP_IMAGE}${backdrop_path}`} />
-                                : <img style={{ height: '25rem', maxWidth: "90%", display: "inline-block" }} alt="placeholder" src="https://748073e22e8db794416a-cc51ef6b37841580002827d4d94d19b6.ssl.cf3.rackcdn.com/not-found.png" />}
-</Paper>
-</Grid>
-                          
                         </>
                     )}
 
-            </Grid>
-        </Container>
+                {/* </Grid> */}
+            </Container>
         </div>
     )
 }
