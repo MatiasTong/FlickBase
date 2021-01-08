@@ -10,7 +10,7 @@ import Fade from 'react-reveal/Fade';
 
     return (
       
-        <Grid item xl={2} md={3} xs={12} >
+        <Grid item xl={2} md={3} sm={6} xs={12} >
             {/* <Zoom in={true} timeout={5000}> */}
             <Paper elevation={0} >
             <Link to={`/MovieDetails/${movie.id}`}>

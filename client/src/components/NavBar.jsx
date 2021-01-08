@@ -30,7 +30,7 @@ function NavBar() {
         {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
           <MenuIcon />
         </IconButton> */}
-        <Typography edge="start"  style={{ position: "relative", fontFamily: "'Patua One', cursive", textShadow: "1px 1px #04d9ff" }} variant="h4" className={classes.title}>
+        <Typography edge="start"  style={{ position: "relative", fontFamily: "'Patua One', cursive", textShadow: "3px 3px rgb(0,200,250), 3px 3px 3px rgb(200,200,100)" }} variant="h4" className={classes.title}>
           FlickBase
           </Typography>
         
