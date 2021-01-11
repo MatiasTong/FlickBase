@@ -26,7 +26,7 @@ export default function Home() {
     const [sortOption, setSortOption] = useState("")
 
     const [movies, dispatchMovies] = useReducer(moviesReducer,
-        { data: [], searchTerm: "", queryType: "", resultsCount: 0, page: 1, isLoading: false, isError: false });
+        { data: [], searchTerm: "", sortOption:"", queryType: "", resultsCount: 0, page: 1, isLoading: false, isError: false });
 
 
 

@@ -25,6 +25,8 @@ import NavBar from "../components/NavBar";
 import { usePalette } from "react-palette";
 import CallMadeIcon from "@material-ui/icons/CallMade";
 import Zoom from "@material-ui/core/Zoom";
+import {Link} from "react-router-dom"
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles({
   root: {
@@ -36,8 +38,15 @@ const useStyles = makeStyles({
   statsCard: {
     margin: "0 auto",
     maxWidth: "90%",
+    backgroundColor: "rgba(0,0,0,0.4)",
+    color: "white",
+    padding: "1rem",
+  fontWeight: 600
   },
-
+  divider:{
+    color:"white",
+    backgroundColor:"white"
+  },
   websiteButton: {
     position: "absolute",
     top: 4,
@@ -56,7 +65,7 @@ export default function MovieDetails() {
   //get the movieId from the route params
   let { movieID } = useParams();
 
-  const MOVIE_URL = `https://api.themoviedb.org/3/movie/${movieID}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`;
+  const MOVIE_URL = `https://api.themoviedb.org/3/movie/${movieID}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&append_to_response=videos`;
   const MOVIE_REF = firebaseDB.ref("movies/" + movieID);
   const POSTER_IMAGE = `https://image.tmdb.org/t/p/w342`;
   const BACKDROP_IMAGE = `https://image.tmdb.org/t/p/w1280/`;
@@ -152,12 +161,28 @@ export default function MovieDetails() {
     tagline,
     overview,
     isLiked,
+    release_date,
+    budget,
+    revenue,
+    runtime,
   } = movieDetails.data;
   const { data, loading, error } = usePalette(`${POSTER_IMAGE}${poster_path}`);
   return (
     <div className="App">
       <NavBar />
       <Container style={{ background: generateBackgroundColors(genres) }}>
+      <Grid container justify="start" style={{paddingTop:"10px"}}>
+      <Button
+                          variant="contained"
+                          aria-label="visit site"
+                          size="small"
+                          component={Link}
+    to="/"> 
+  <ArrowBackIosIcon fontSize="small"/>Back
+                        </Button>
+      </Grid>
+
+
         {/* <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}> */}
         {movieDetails.isError && <p>Something went wrong ...</p>}
 
@@ -272,17 +297,32 @@ export default function MovieDetails() {
             >
               <Grid item lg={3} md={3} xs={12}>
                 <Paper className={classes.statsCard}>
-                  <ListItem>
+                <ListItem>
                     <ListItemText
-                      primary={`Popularity: ${popularity}`}
-                      secondary="Secondary text"
+                  
+                      primary={`Release Date: ${release_date}`}
+                      // secondary="Secondary text"
                     />
                   </ListItem>
-                  <Divider />
+                  <Divider className={classes.divider} />
                   <ListItem>
                     <ListItemText
-                      primary="Single-line item"
-                      secondary="Secondary"
+                      primary={`Length: ${runtime}min`}
+                      // secondary="Secondary text"
+                    />
+                  </ListItem>
+                  <Divider className={classes.divider} />
+                  <ListItem>
+                    <ListItemText
+                      primary={`Budget: $${budget}`}
+                      // secondary="Secondary text"
+                    />
+                  </ListItem>
+                  <Divider className={classes.divider} />
+                  <ListItem>
+                    <ListItemText
+                       primary={`Revenue: $${revenue}`}
+                      // secondary="Secondary"
                     />
                   </ListItem>
                 </Paper>

@@ -14,7 +14,7 @@ export default function movieDetailsReducer(state, action) {
                 isError: false,
             }
         case 'MOVIE_FETCH_SUCCESS':
-           
+           console.log(action.payload)
             return {
                 ...state,
                 isLoading: false,
