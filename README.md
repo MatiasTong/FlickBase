@@ -1,6 +1,6 @@
 # FlickBase
 
-![Flickbase Landing Page](/client/public/flickbase.jpg)<br/>
+![Flickbase Landing Page](/client/public/flickbase2.jpg)<br/>
 
 A cool project I built to experiment with managing state in react using reducers and using the material ui component library and other packages like the react infinite scroll component and react palette. This movie search app calls different endpoints from The Movie Database API. To view the live demo, visit: https://www.youtube.com/watch?v=MLyla1Kzx6w&feature=youtu.be. You can also try it out at https://flickbase.netlify.app/
 
